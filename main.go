@@ -19,64 +19,88 @@ type marvelRes struct {
 	AttributionText string `json:"attributionText"`
 	AttributionHTML string `json:"attributionHTML"`
 	Etag            string `json:"etag"`
-	Data            struct {
-		Offset  int `json:"offset"`
-		Limit   int `json:"limit"`
-		Total   int `json:"total"`
-		Count   int `json:"count"`
-		Results []struct {
-			ID          int    `json:"id"`
-			Name        string `json:"name"`
-			Description string `json:"description"`
-			Modified    string `json:"modified"`
-			Thumbnail   struct {
-				Path      string `json:"path"`
-				Extension string `json:"extension"`
-			} `json:"thumbnail"`
-			ResourceURI string `json:"resourceURI"`
-			Comics      struct {
-				Available     int    `json:"available"`
-				CollectionURI string `json:"collectionURI"`
-				Items         []struct {
-					ResourceURI string `json:"resourceURI"`
-					Name        string `json:"name"`
-				} `json:"items"`
-				Returned int `json:"returned"`
-			} `json:"comics"`
-			Series struct {
-				Available     int    `json:"available"`
-				CollectionURI string `json:"collectionURI"`
-				Items         []struct {
-					ResourceURI string `json:"resourceURI"`
-					Name        string `json:"name"`
-				} `json:"items"`
-				Returned int `json:"returned"`
-			} `json:"series"`
-			Stories struct {
-				Available     int    `json:"available"`
-				CollectionURI string `json:"collectionURI"`
-				Items         []struct {
-					ResourceURI string `json:"resourceURI"`
-					Name        string `json:"name"`
-					Type        string `json:"type"`
-				} `json:"items"`
-				Returned int `json:"returned"`
-			} `json:"stories"`
-			Events struct {
-				Available     int    `json:"available"`
-				CollectionURI string `json:"collectionURI"`
-				Items         []struct {
-					ResourceURI string `json:"resourceURI"`
-					Name        string `json:"name"`
-				} `json:"items"`
-				Returned int `json:"returned"`
-			} `json:"events"`
-			Urls []struct {
-				Type string `json:"type"`
-				URL  string `json:"url"`
-			} `json:"urls"`
-		} `json:"results"`
-	} `json:"data"`
+	Data            Data   `json:"data"`
+}
+
+type Data struct {
+	Offset  int       `json:"offset"`
+	Limit   int       `json:"limit"`
+	Total   int       `json:"total"`
+	Count   int       `json:"count"`
+	Results []Results `json:"results"`
+}
+
+type Results struct {
+	ID          int       `json:"id"`
+	Name        string    `json:"name"`
+	Description string    `json:"description"`
+	Modified    string    `json:"modified"`
+	Thumbnail   Thumbnail `json:"thumbnail"`
+	ResourceURI string    `json:"resourceURI"`
+	Comics      Comics    `json:"comics"`
+	Series      Series    `json:"series"`
+	Stories     Stories   `json:"stories"`
+	Events      Events    `json:"events"`
+	Urls        []Urls    `json:"urls"`
+}
+
+type Thumbnail struct {
+	Path      string `json:"path"`
+	Extension string `json:"extension"`
+}
+
+type Comics struct {
+	Available     int          `json:"available"`
+	CollectionURI string       `json:"collectionURI"`
+	ItemsComic    []ItemsComic `json:"items"`
+	Returned      int          `json:"returned"`
+}
+
+type ItemsComic struct {
+	ResourceURI string `json:"resourceURI"`
+	Name        string `json:"name"`
+}
+
+type Series struct {
+	Available     int           `json:"available"`
+	CollectionURI string        `json:"collectionURI"`
+	ItemsSeries   []ItemsSeries `json:"items"`
+	Returned      int           `json:"returned"`
+}
+
+type ItemsSeries struct {
+	ResourceURI string `json:"resourceURI"`
+	Name        string `json:"name"`
+}
+
+type Stories struct {
+	Available     int            `json:"available"`
+	CollectionURI string         `json:"collectionURI"`
+	ItemsStories  []ItemsStories `json:"items"`
+	Returned      int            `json:"returned"`
+}
+
+type ItemsStories struct {
+	ResourceURI string `json:"resourceURI"`
+	Name        string `json:"name"`
+	Type        string `json:"type"`
+}
+
+type Events struct {
+	Available     int           `json:"available"`
+	CollectionURI string        `json:"collectionURI"`
+	ItemsEvents   []ItemsEvents `json:"items"`
+	Returned      int           `json:"returned"`
+}
+
+type ItemsEvents struct {
+	ResourceURI string `json:"resourceURI"`
+	Name        string `json:"name"`
+}
+
+type Urls struct {
+	Type string `json:"type"`
+	URL  string `json:"url"`
 }
 
 func main() {
@@ -177,22 +201,22 @@ func getResponseOp1(str string) string {
 				descripcion := s.Data.Results[0].Description
 				modificado := s.Data.Results[0].Modified
 				if s.Data.Results[0].Comics.Available > 0 {
-					nombreComic = s.Data.Results[0].Comics.Items[0].Name
+					nombreComic = s.Data.Results[0].Comics.ItemsComic[0].Name
 				} else {
 					nombreComic = "No Tiene"
 				}
 				if s.Data.Results[0].Series.Available > 0 {
-					nombreSeries = s.Data.Results[0].Series.Items[0].Name
+					nombreSeries = s.Data.Results[0].Series.ItemsSeries[0].Name
 				} else {
 					nombreSeries = "No Tiene"
 				}
 				if s.Data.Results[0].Stories.Available > 0 {
-					nombreStories = s.Data.Results[0].Stories.Items[0].Name
+					nombreStories = s.Data.Results[0].Stories.ItemsStories[0].Name
 				} else {
 					nombreStories = "No Tiene"
 				}
 				if s.Data.Results[0].Events.Available > 0 {
-					nombreEvents = s.Data.Results[0].Events.Items[0].Name
+					nombreEvents = s.Data.Results[0].Events.ItemsEvents[0].Name
 				} else {
 					nombreEvents = "No Tiene"
 				}
