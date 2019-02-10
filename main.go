@@ -19,86 +19,86 @@ type marvelRes struct {
 	AttributionText string `json:"attributionText"`
 	AttributionHTML string `json:"attributionHTML"`
 	Etag            string `json:"etag"`
-	Data            Data   `json:"data"`
+	Data            data   `json:"data"`
 }
 
-type Data struct {
+type data struct {
 	Offset  int       `json:"offset"`
 	Limit   int       `json:"limit"`
 	Total   int       `json:"total"`
 	Count   int       `json:"count"`
-	Results []Results `json:"results"`
+	Results []results `json:"results"`
 }
 
-type Results struct {
+type results struct {
 	ID          int       `json:"id"`
 	Name        string    `json:"name"`
 	Description string    `json:"description"`
 	Modified    string    `json:"modified"`
-	Thumbnail   Thumbnail `json:"thumbnail"`
+	Thumbnail   thumbnail `json:"thumbnail"`
 	ResourceURI string    `json:"resourceURI"`
-	Comics      Comics    `json:"comics"`
-	Series      Series    `json:"series"`
-	Stories     Stories   `json:"stories"`
-	Events      Events    `json:"events"`
-	Urls        []Urls    `json:"urls"`
+	Comics      comics    `json:"comics"`
+	Series      series    `json:"series"`
+	Stories     stories   `json:"stories"`
+	Events      events    `json:"events"`
+	Urls        []urls    `json:"urls"`
 }
 
-type Thumbnail struct {
+type thumbnail struct {
 	Path      string `json:"path"`
 	Extension string `json:"extension"`
 }
 
-type Comics struct {
+type comics struct {
 	Available     int          `json:"available"`
 	CollectionURI string       `json:"collectionURI"`
-	ItemsComic    []ItemsComic `json:"items"`
+	ItemsComic    []itemsComic `json:"items"`
 	Returned      int          `json:"returned"`
 }
 
-type ItemsComic struct {
+type itemsComic struct {
 	ResourceURI string `json:"resourceURI"`
 	Name        string `json:"name"`
 }
 
-type Series struct {
+type series struct {
 	Available     int           `json:"available"`
 	CollectionURI string        `json:"collectionURI"`
-	ItemsSeries   []ItemsSeries `json:"items"`
+	ItemsSeries   []itemsSeries `json:"items"`
 	Returned      int           `json:"returned"`
 }
 
-type ItemsSeries struct {
+type itemsSeries struct {
 	ResourceURI string `json:"resourceURI"`
 	Name        string `json:"name"`
 }
 
-type Stories struct {
+type stories struct {
 	Available     int            `json:"available"`
 	CollectionURI string         `json:"collectionURI"`
-	ItemsStories  []ItemsStories `json:"items"`
+	ItemsStories  []itemsStories `json:"items"`
 	Returned      int            `json:"returned"`
 }
 
-type ItemsStories struct {
+type itemsStories struct {
 	ResourceURI string `json:"resourceURI"`
 	Name        string `json:"name"`
 	Type        string `json:"type"`
 }
 
-type Events struct {
+type events struct {
 	Available     int           `json:"available"`
 	CollectionURI string        `json:"collectionURI"`
-	ItemsEvents   []ItemsEvents `json:"items"`
+	ItemsEvents   []itemsEvents `json:"items"`
 	Returned      int           `json:"returned"`
 }
 
-type ItemsEvents struct {
+type itemsEvents struct {
 	ResourceURI string `json:"resourceURI"`
 	Name        string `json:"name"`
 }
 
-type Urls struct {
+type urls struct {
 	Type string `json:"type"`
 	URL  string `json:"url"`
 }
@@ -128,7 +128,7 @@ func main() {
 		entrada, _ := reader.ReadString('\n')          // Leer hasta el separador de salto de línea
 		eleccion := strings.TrimRight(entrada, "\r\n") // remueve los saltos de linea
 
-		nombre := fmt.Sprintf("&nameStartsWith=%s", UrlEncoded(eleccion))
+		nombre := fmt.Sprintf("&nameStartsWith=%s", urlEncoded(eleccion))
 
 		var buffer bytes.Buffer
 
@@ -163,7 +163,7 @@ func main() {
 }
 
 func getStations(body []byte) (*marvelRes, error) {
-	var s = new(marvelRes)
+	var s *marvelRes = new(marvelRes)
 	err := json.Unmarshal(body, &s)
 	if err != nil {
 		fmt.Println("Error:", err)
@@ -171,7 +171,7 @@ func getStations(body []byte) (*marvelRes, error) {
 	return s, err
 }
 
-func UrlEncoded(str string) string {
+func urlEncoded(str string) string {
 
 	t := &url.URL{Path: str}
 	return t.String()
